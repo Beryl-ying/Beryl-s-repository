@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div{
+            border:2px soild #000;
+        }
+    </style>
+</head>
+<body>
+    <input id='input' type='text' value=''/>
+    <button>提交</button>　
+    <div> </div>
+</body>
+<script>
+    var btn=document.querySelector('button');
+    var input=document.querySelector('#input');
+    var div=document.querySelector('div');
+    var socket= new WebSocket('ws://localhost:3000');
+
+    socket.addEventListener('open',function(){//当和Websocket服务连接成功时触发
+        div.innerHTML='连接成功';
+    })
+
+    btn.addEventListener('click',function(){//主动给Websocket服务发送消息
+        var value = input.value
+        socket.send(value)
+        input.value = '';
+    })
+
+    socket.addEventListener('message', function(e){//接受Websocket服务的数据
+        console.log(e.data);
+        var dv = document.createElement('div');
+        dv.innerText = e.data
+        div.appendChild(dv);
+    })
+</script>
+</html>
